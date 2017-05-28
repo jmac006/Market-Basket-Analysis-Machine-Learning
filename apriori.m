@@ -19,23 +19,24 @@ function largeSubsets = apriori(I,D,minSupport)
     end
     
     largeSubsets = individualSubsets;
-    %A = [1, 3, 5]
-    %largeSubsets = [largeSubsets A];
-    %largeSubsets{89}
     
     F = individualSubsets;
     while ~isempty(F)
-        candidateSets = apriori_gen(F);
+        candidateSets = apriori_gen(F); %generate the candidate sets from the previous level
         F = {};
         for c = 1:size(candidateSets,2)
-            support = getcount(c,D) / numTransactions;
+            support = getcount(candidateSets{c},D) / numTransactions;
             if support > minSupport
-                F = [F candidateSets{c}] %add the candidate to F
+                F = [F candidateSets{c}]; %add the candidate to F
             end
         end
-        %L = union(L,F) or L = [L F]
-        %largeSubsets = union(largeSubsets, F);
+        largeSubsets = [largeSubsets F]; %add F to the large subsets
     end
     
+    %Test
+    %A = [1, 3, 5]
+    %largeSubsets = [largeSubsets A]
+    %largeSubsets = union(largeSubsets, A);
+    %B = largeSubsets{302}
 end
 
