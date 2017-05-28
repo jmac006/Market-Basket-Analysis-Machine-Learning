@@ -7,7 +7,7 @@ function largeSubsets = apriori(I,D,minSupport)
     largeSubsets = {}; %candidate subsets
     individualSubsets = {}; %individual subsets that meet minimum support
     numTransactions = numexamples(D); %returns the number of transactions in D
-    [m,numItems] = size(I)
+    [m,numItems] = size(I);
     
     %find the support for individual itemsets, check if they match the
     %minimum support
@@ -33,10 +33,5 @@ function largeSubsets = apriori(I,D,minSupport)
         largeSubsets = [largeSubsets F]; %add F to the large subsets
     end
     
-    %Test
-    %A = [1, 3, 5]
-    %largeSubsets = [largeSubsets A]
-    %largeSubsets = union(largeSubsets, A);
-    %B = largeSubsets{302}
 end
 

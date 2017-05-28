@@ -2,20 +2,50 @@
 % Name: Justin Mac
 % Date: 5/25/17
 % SID: 861086907
-
 function findrules(D, smin, amin)
-	%Input: Dataset, minimum support, minimum confidence
-	I = items(D) %returns vector of all items in D in sorted order
-	str = rule2str(0,2,D)
+	%Input: Dataset, minimum support, minimum confidence (alpha min)
+	I = items(D); %returns vector of all items in D in sorted order
+	%str = rule2str(0,[1 2],D)
 	%num = getcount(set, D); %returns the number of transactions in set are present in D
-	%m = numexamples(D); %returns the number of transactions in D
+    
 	%str = rule2str(X,Y,D) %returns rule represented as string
     
-    C = {};
-    %find the support for individual itemsets, check if they match the
-    %minimum support
-    for i = 1:size(I)
-        for j = 1:numexamples(D)
-            
-        
+    %find the association rules based on minimum confidence
+    Rules = table;
+    L = apriori(I,D,smin); %contains all the large subsets to generate candidate rules
+    
+    for i = 1:size(L,2)
+        subset = PowerSet(L{i});
+        subset = subset(:,2:end); %remove the empty set
+        for x = 1:size(subset,2) %for all x in the power set
+            confidence = getcount(L{i},D) / getcount(subset{x},D);
+            if confidence > amin
+                support = getcount(L{i},D) / numexamples(D);
+                str = rule2str(subset{x},setdiff(L{i},subset{x}),D);
+                row = {confidence, support, str}
+                
+            end
+        end
+    end
+    
+    
+end
+
+function pset = PowerSet(theSet)
+
+    pset = cell(size(theSet-1)); %Preallocate memory
+
+    %Generate all numbers from 0 to 2^(num elements of the set)-1
+    for i = ( 1:(2^numel(theSet))-2 )
+
+        %Convert i into binary, convert each digit in binary to a boolean
+        %and store that array of booleans
+        indicies = logical(bitget( i,(1:numel(theSet)) ));
+
+        %Use the array of booleans to extract the members of the original
+        %set, and store the set containing these members in the powerset
+        pset(i+1) = {theSet(indicies)};
+
+    end
+
 end

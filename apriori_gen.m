@@ -7,7 +7,6 @@ function candidateSets = apriori_gen(L)
     candidateSets = {};
     for j = 1:size(L,2)
         for k = j+1:size(L,2)
-            %Lj = L[j](:,end-1)
             %generate subsets of 2 if there are only subsets of size 1 in L
             if size(L{j},2) == 1
                 s = union(L{j}, L{k});
@@ -21,5 +20,6 @@ function candidateSets = apriori_gen(L)
             end
         end
     end
+    
 end
 
